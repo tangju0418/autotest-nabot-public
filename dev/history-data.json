@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "build_number": "7",
+    "run_id": "24404623203-develop",
+    "branch": "develop",
+    "env": "dev",
+    "build_time": "2026-04-14 22:27:01",
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "broken": 0,
+    "skipped": 0
+  }
+]

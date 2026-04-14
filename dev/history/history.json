@@ -1,0 +1,1 @@
+{"0b130693fb17d3237159741e27aabafb":{"statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1},"items":[{"uid":"ac2840862e7838fd","reportUrl":"https://tangju0418.github.io/autotest-nabot-public/dev/reports/24404623203-develop//#testresult/ac2840862e7838fd","status":"passed","time":{"start":1776176821516,"stop":1776176821710,"duration":194}}]}}
