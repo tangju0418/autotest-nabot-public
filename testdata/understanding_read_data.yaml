@@ -1,0 +1,142 @@
+test_understanding_read:
+  - name: "学习场景-继续学习Python成功"
+    description: "验证学习场景下继续学习Python成功"
+    use_env_token: true
+    endpoint: "/understanding/method/api/understanding/read"
+    timeout: 60
+    user_id: "659bb8db-4a9e-443b-8c81-89ee83a8f4d9"
+    data:
+      scenario_id: ""
+      scenario_type: "education"
+      timestamp: ""
+      user_action:
+        type: "start_learning"
+        description: "User wants to continue learning advanced Python topics"
+    retrieval_options:
+      similarity_threshold: 0.75
+      time_window:
+        enabled: true
+        days: 30
+    expected_status_code: 200
+    expected_response:
+      status: "success"
+
+  - name: "AI聊天场景-查询生日信息"
+    description: "验证AI聊天场景下查询生日信息成功"
+    use_env_token: true
+    endpoint: "/understanding/method/api/understanding/read"
+    user_id: "659bb8db-4a9e-443b-8c81-89ee83a8f4d9"
+    data:
+      scenario_id: ""
+      scenario_type: "ai_chat"
+      timestamp: ""
+      location:
+        address: "unknown"
+        latitude: 30.5732758
+        longitude: 104.0597252
+      user_action:
+        type: "chat_query"
+        description: "User is sending a message \"我的生日是多久\""
+    expected_status_code: 200
+
+  - name: "学习场景-user_id为空-400"
+    description: "验证user_id为空时返回400错误"
+    use_env_token: true
+    endpoint: "/understanding/method/api/understanding/read"
+    timeout: 60
+    user_id: ""
+    data:
+      scenario_id: ""
+      scenario_type: "education"
+      timestamp: ""
+      user_action:
+        type: "start_learning"
+        description: "User wants to continue learning advanced Python topics"
+    retrieval_options:
+      similarity_threshold: 0.75
+      time_window:
+        enabled: true
+        days: 30
+    expected_status_code: 400
+    expected_response:
+      status: "error"
+      error_code: "MISSING_REQUIRED_FIELD"
+      error_message: "user_id is required"
+
+  - name: "学习场景-缺少scenario_type-400"
+    description: "验证缺少scenario_type时返回400错误"
+    use_env_token: true
+    endpoint: "/understanding/method/api/understanding/read"
+    timeout: 60
+    user_id: "659bb8db-4a9e-443b-8c81-89ee83a8f4d9"
+    data:
+      scenario_id: ""
+      timestamp: ""
+      user_action:
+        type: "start_learning"
+        description: "User wants to continue learning advanced Python topics"
+    expected_status_code: 400
+
+  - name: "学习场景-缺少user_action-400"
+    description: "验证缺少user_action时返回400错误"
+    use_env_token: true
+    endpoint: "/understanding/method/api/understanding/read"
+    timeout: 60
+    user_id: "659bb8db-4a9e-443b-8c81-89ee83a8f4d9"
+    data:
+      scenario_id: ""
+      scenario_type: "education"
+      timestamp: ""
+    expected_status_code: 400
+
+  - name: "学习场景-无效的user_id格式-成功"
+    description: "验证无效的user_id格式时也能成功（API容错处理）"
+    use_env_token: true
+    endpoint: "/understanding/method/api/understanding/read"
+    timeout: 60
+    user_id: "invalid_user_id"
+    data:
+      scenario_id: ""
+      scenario_type: "education"
+      timestamp: ""
+      user_action:
+        type: "start_learning"
+        description: "User wants to continue learning advanced Python topics"
+    expected_status_code: 200
+
+  - name: "学习场景-无效的Authorization-成功"
+    description: "验证无效的Authorization时也能成功（API容错处理）"
+    use_env_token: false
+    headers:
+      Authorization: "token invalid_token"
+    endpoint: "/understanding/method/api/understanding/read"
+    timeout: 60
+    user_id: "659bb8db-4a9e-443b-8c81-89ee83a8f4d9"
+    data:
+      scenario_id: ""
+      scenario_type: "education"
+      timestamp: ""
+      user_action:
+        type: "start_learning"
+        description: "User wants to continue learning advanced Python topics"
+    expected_status_code: 200
+
+  - name: "学习场景-retrieval_options边界测试"
+    description: "验证retrieval_options参数边界值处理"
+    use_env_token: true
+    endpoint: "/understanding/method/api/understanding/read"
+    timeout: 60
+    user_id: "659bb8db-4a9e-443b-8c81-89ee83a8f4d9"
+    data:
+      scenario_id: ""
+      scenario_type: "education"
+      timestamp: ""
+      user_action:
+        type: "start_learning"
+        description: "User wants to continue learning advanced Python topics"
+    retrieval_options:
+      similarity_threshold: 1.0
+      time_window:
+        enabled: true
+        days: 365
+    expected_status_code: 200

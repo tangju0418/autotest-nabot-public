@@ -1,0 +1,20 @@
+test_focus_top_level:
+  - name: "top_level接口-获取focus列表成功"
+    description: "验证获取focus列表成功"
+    use_env_token: true
+    endpoint: "/intent-os-mindspace-multi-agent-api/method/api/focus/top-level"
+    expected_status_code: 200
+    expected_response:
+      success: true
+    expected_data_not_empty: true
+
+  - name: "top_level接口-无效的Authorization-401"
+    description: "验证无效的Authorization时返回401错误"
+    use_env_token: false
+    headers:
+      Authorization: "token invalid_token"
+    endpoint: "/intent-os-mindspace-multi-agent-api/method/api/focus/top-level"
+    expected_status_code: 401
+    expected_response:
+      success: false
+      error: "無効または期限切れのトークン"

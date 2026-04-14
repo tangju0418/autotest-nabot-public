@@ -1,0 +1,113 @@
+test_planning_conductor:
+  - name: "conductor接口-查询天气成功"
+    description: "验证查询天气成功"
+    use_env_token: true
+    endpoint: "/planning-api/method/v2/conductor"
+    data:
+      session_id: ""
+      focus_id: "auto"
+      message_id: ""
+      query: "今天天气如何"
+      stream: true
+      pubsub_topic: ""
+    expected_status_code: 200
+    expected_response:
+      action: "chat"
+
+  - name: "conductor接口-创建会话并查询成功"
+    description: "验证创建会话并查询成功（完整业务流程）"
+    use_env_token: true
+    endpoint: "/planning-api/method/v2/conductor"
+    data:
+      session_id: ""
+      focus_id: "auto"
+      message_id: ""
+      query: "帮我规划今天的任务"
+      stream: true
+      pubsub_topic: ""
+    expected_status_code: 200
+    expected_response:
+      action: "chat"
+
+  - name: "conductor接口-缺少session_id-400"
+    description: "验证缺少session_id时返回400错误"
+    use_env_token: true
+    endpoint: "/planning-api/method/v2/conductor"
+    data:
+      focus_id: "auto"
+      message_id: ""
+      query: "今天天气如何"
+      stream: true
+      pubsub_topic: ""
+    expected_status_code: 400
+    expected_response:
+      name: "missing_session_id"
+      message: "セッションIDが不足しています"
+      data: null
+
+  - name: "conductor接口-session_id为空字符串-成功"
+    description: "验证session_id为空字符串时也能成功（会自动创建session）"
+    use_env_token: true
+    endpoint: "/planning-api/method/v2/conductor"
+    data:
+      session_id: ""
+      focus_id: "auto"
+      message_id: ""
+      query: "今天天气如何"
+      stream: true
+      pubsub_topic: ""
+    expected_status_code: 200
+
+  - name: "conductor接口-query为空-成功"
+    description: "验证query为空时也能成功"
+    use_env_token: true
+    endpoint: "/planning-api/method/v2/conductor"
+    data:
+      session_id: ""
+      focus_id: "auto"
+      message_id: ""
+      query: ""
+      stream: true
+      pubsub_topic: ""
+    expected_status_code: 200
+
+  - name: "conductor接口-stream参数为false-成功"
+    description: "验证stream参数为false时也能成功"
+    use_env_token: true
+    endpoint: "/planning-api/method/v2/conductor"
+    data:
+      session_id: ""
+      focus_id: "auto"
+      message_id: ""
+      query: "今天天气如何"
+      stream: false
+      pubsub_topic: ""
+    expected_status_code: 200
+
+  - name: "conductor接口-无效的Authorization-401"
+    description: "验证无效的Authorization时返回401错误"
+    use_env_token: false
+    headers:
+      Authorization: "token invalid_token"
+    endpoint: "/planning-api/method/v2/conductor"
+    data:
+      session_id: ""
+      focus_id: "auto"
+      message_id: ""
+      query: "今天天气如何"
+      stream: true
+      pubsub_topic: ""
+    expected_status_code: 401
+
+  - name: "conductor接口-超长query-边界测试"
+    description: "验证超长query的处理"
+    use_env_token: true
+    endpoint: "/planning-api/method/v2/conductor"
+    data:
+      session_id: ""
+      focus_id: "auto"
+      message_id: ""
+      query: "这是一个非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常非常长的查询内容用于测试边界情况"
+      stream: true
+      pubsub_topic: ""
+    expected_status_code: 200

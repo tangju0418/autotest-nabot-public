@@ -1,0 +1,37 @@
+# ========================================
+# BrainAutoTest - 项目配置文件
+# ========================================
+# pyproject.toml 是 Python 项目的核心配置文件
+# 使用 uv 工具管理时，此文件用于定义项目元数据和依赖
+#
+# 常用命令：
+#   uv sync        - 同步安装依赖（根据此文件）
+#   uv pip install - 安装依赖
+#   uv python install <version> - 安装指定 Python 版本
+#   uv venv .venv --python=<version> - 创建虚拟环境
+# ========================================
+
+[project]
+name = "brainautotest"
+version = "0.1.0"
+description = "API自动化测试框架"
+requires-python = ">=3.12"
+dependencies = [
+    "pytest>=9.0.2",
+    "pytest-html>=4.2.0",
+    "pytest-metadata>=3.1.1",
+    "requests>=2.32.3",
+    "urllib3>=2.3.0",
+    "allure-pytest>=2.15.3",
+    "PyYAML>=6.0.2",
+]
+
+[dependency-groups]
+dev = []
+
+[tool.pytest.ini_options]
+testpaths = ["src/testcases"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --html=bucket/html-report/report.html --self-contained-html"

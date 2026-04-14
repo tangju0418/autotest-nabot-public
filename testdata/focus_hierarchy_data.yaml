@@ -1,0 +1,29 @@
+test_focus_hierarchy:
+  - name: "hierarchy接口-获取指定focus信息成功"
+    description: "验证获取指定focus信息成功"
+    use_env_token: true
+    endpoint: "/intent-os-mindspace-multi-agent-api/method/api/focus"
+    focus_id: "50e0cb8d-dcb2-4017-af64-79f33e816fbf"
+    expected_status_code: 200
+    expected_response:
+      success: true
+    expected_data_id_match: true
+
+  - name: "hierarchy接口-无效的focus_id-500"
+    description: "验证无效的focus_id时返回500错误"
+    use_env_token: true
+    endpoint: "/intent-os-mindspace-multi-agent-api/method/api/focus"
+    focus_id: "invalid_focus_id"
+    expected_status_code: 500
+
+  - name: "hierarchy接口-无效的Authorization-401"
+    description: "验证无效的Authorization时返回401错误"
+    use_env_token: false
+    headers:
+      Authorization: "token invalid_token"
+    endpoint: "/intent-os-mindspace-multi-agent-api/method/api/focus"
+    focus_id: "50e0cb8d-dcb2-4017-af64-79f33e816fbf"
+    expected_status_code: 401
+    expected_response:
+      success: false
+      error: "無効または期限切れのトークン"

@@ -1,0 +1,57 @@
+test_planning_delete:
+  - name: "delete接口-删除会话成功"
+    description: "验证删除会话成功（先创建后删除）"
+    use_env_token: true
+    endpoint: "/planning-api/method/ai_phone/planning/delete"
+    create_session_first: true
+    expected_status_code: 200
+    expected_response:
+      success: true
+      message: "セッションが正常に削除されました"
+
+  - name: "delete接口-删除后验证不存在"
+    description: "验证删除后再次查询该session返回错误"
+    use_env_token: true
+    endpoint: "/planning-api/method/ai_phone/planning/delete"
+    create_session_first: true
+    verify_after_delete: true
+    expected_status_code: 200
+
+  - name: "delete接口-缺少session_id-400"
+    description: "验证缺少session_id时返回400错误"
+    use_env_token: true
+    endpoint: "/planning-api/method/ai_phone/planning/delete"
+    session_id: ""
+    expected_status_code: 400
+
+  - name: "delete接口-无效的session_id-400"
+    description: "验证无效的session_id时返回400错误"
+    use_env_token: true
+    endpoint: "/planning-api/method/ai_phone/planning/delete"
+    session_id: "invalid_session_id"
+    expected_status_code: 400
+    expected_response:
+      name: "agent_delete_operation_failed"
+      message: "セッション記録が見つかりません。セッションは削除されたか、存在しない可能性があります。"
+      data: null
+
+  - name: "delete接口-无效的Authorization-401"
+    description: "验证无效的Authorization时返回401错误"
+    use_env_token: false
+    headers:
+      Authorization: "token invalid_token"
+    endpoint: "/planning-api/method/ai_phone/planning/delete"
+    session_id: "test_session_id"
+    expected_status_code: 401
+    expected_response:
+      name: "unauthorized"
+      message: "ログインの有効期限が切れました。再度ログインしてください"
+      data: null
+
+  - name: "delete接口-重复删除同一session-幂等性验证"
+    description: "验证重复删除同一session的幂等性"
+    use_env_token: true
+    endpoint: "/planning-api/method/ai_phone/planning/delete"
+    create_session_first: true
+    delete_twice: true
+    expected_status_code: 200

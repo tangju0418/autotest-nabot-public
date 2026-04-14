@@ -1,0 +1,49 @@
+# ========================================
+# HTTP配置文件
+# ========================================
+# 本配置文件定义了HTTP客户端的全局配置，包括：
+# - 超时时间
+# - 多环境配置
+# - 日志配置
+#
+# 配置优先级：环境变量 > 配置文件 > 默认值
+#
+# 使用方式：
+#   1. 修改配置文件后，重启测试即可生效
+#   2. 通过环境变量覆盖配置：set TEST_ENV=prod
+#   3. 在代码中动态修改：config_loader.clear_cache()
+# ========================================
+
+# HTTP基础配置
+http:
+  timeout: 30                    # 请求超时时间（秒），建议范围：10-60秒
+  verify_ssl: false              # SSL证书验证，生产环境必须为true
+  max_connections: 100           # 最大连接数，连接池大小
+  max_keepalive_connections: 20  # 最大保活连接数，复用连接提升性能
+
+# 多环境配置
+# 根据 TEST_ENV 切换（可在项目根 .env 中设置，或通过 export）
+# 优先级：API_BASE_URL 环境变量 > 本文件对应环境的 base_url
+environments:
+  dev:
+    base_url: "https://api.dev.brain.ai/v1.0/invoke"
+    timeout: 30
+    verify_ssl: false
+
+  prod:
+    base_url: "https://api.cloud.brain.ai/v1.0/invoke"
+    timeout: 30
+    verify_ssl: true
+
+  jp:
+    base_url: "https://api.jp.brain.ai/v1.0/invoke"
+    timeout: 30
+    verify_ssl: true
+
+# 日志配置
+logging:
+  level: "INFO"                  # 日志级别：DEBUG/INFO/WARNING/ERROR/CRITICAL
+  log_request_body: true         # 是否记录请求体，敏感接口建议关闭
+  log_response_body: true        # 是否记录响应体，敏感数据建议关闭
+  log_headers: false             # 是否记录请求头，包含Token等敏感信息建议关闭
+
