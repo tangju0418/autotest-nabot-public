@@ -10,3 +10,4 @@ build/
 bucket/
 debug.log
 *.log
+.env
