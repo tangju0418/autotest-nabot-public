@@ -226,6 +226,9 @@ jobs:
     if: always()
     permissions:
       contents: write
+    concurrency:
+      group: ${{ github.repository }}-gh-pages-publish
+      cancel-in-progress: false
 
     steps:
     - name: Download Allure Results
@@ -244,7 +247,32 @@ jobs:
 
     - name: Prepare report root
       run: |
-        mkdir -p bucket/generated-reports bucket/final-report/dev bucket/final-report/prod bucket/final-report/jp
+        python << 'PYTHON_EOF'
+        import os
+        import shutil
+
+        source_root = "gh-pages"
+        target_root = os.path.join("bucket", "final-report")
+
+        os.makedirs(target_root, exist_ok=True)
+        if os.path.isdir(source_root):
+            for entry in os.listdir(source_root):
+                if entry == ".git":
+                    continue
+                source_path = os.path.join(source_root, entry)
+                target_path = os.path.join(target_root, entry)
+                if os.path.isdir(source_path):
+                    if os.path.exists(target_path):
+                        shutil.rmtree(target_path)
+                    shutil.copytree(source_path, target_path)
+                else:
+                    shutil.copy2(source_path, target_path)
+
+        for env_name in ["dev", "prod", "jp"]:
+            os.makedirs(os.path.join(target_root, env_name), exist_ok=True)
+        os.makedirs(os.path.join("bucket", "generated-reports"), exist_ok=True)
+        print("[CiWorkflow] report_root_prepared | source=gh-pages | target=bucket/final-report")
+        PYTHON_EOF
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -655,7 +683,6 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
         publish_dir: bucket/final-report
-        keep_files: true
 
     - name: Upload Allure HTML Report
       uses: actions/upload-artifact@v4
