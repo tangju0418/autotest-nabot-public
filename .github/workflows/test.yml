@@ -72,6 +72,8 @@ jobs:
 
         schedule_matrix = [
             branch_map["develop"],
+            branch_map["master"],
+            branch_map["jp"],
         ]
 
         if event_name == "schedule":
