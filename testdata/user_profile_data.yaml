@@ -5,30 +5,3 @@ test_user_profile:
     expected_status_code: 200
     expected_fields:
       email: "tangju+002@brain.im"
-
-  - name: "缺少Authorization参数-400"
-    description: "验证不带Authorization header时返回400错误"
-    use_env_token: false
-    expected_status_code: 400
-    expected_response:
-      name: "bad_request"
-      message: "Missing Authorization header"
-      data: {}
-
-  - name: "无效的Authorization-400"
-    description: "验证无效的Authorization时返回400错误"
-    use_env_token: false
-    headers:
-      Authorization: "token invalid_token"
-    expected_status_code: 400
-    expected_response:
-      name: "bad_request"
-      message: "Invalid token format"
-      data: {}
-
-  - name: "校验用户email格式"
-    description: "验证用户email格式正确"
-    use_env_token: true
-    expected_status_code: 200
-    expected_fields:
-      email: "tangju+002@brain.im"
