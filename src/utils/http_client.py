@@ -404,6 +404,10 @@ def resolve_api_headers(
     if host:
         resolved_headers.setdefault("Host", host)
     resolved_headers.setdefault("Content-Type", "application/json")
+    resolved_headers = {
+        key: value.strip() if isinstance(value, str) else value
+        for key, value in resolved_headers.items()
+    }
 
     logger.info(
         f"[ApiAuth] build_api_client | env={_env.ENV} | use_env_token={use_env_token} | headers_provided={headers is not None} | "

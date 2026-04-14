@@ -26,6 +26,11 @@ from src.utils.config_loader import config_loader, get_environment_config
 _DOTENV_LOADED = False
 
 
+def _normalize_env_text(value: Optional[str]) -> str:
+    """清洗环境变量中的首尾空白, 避免 secret 末尾换行污染请求头."""
+    return value.strip() if isinstance(value, str) else ""
+
+
 def project_root() -> Path:
     """autotest-nabot 仓库根目录(含 pyproject.toml、.env)."""
     return Path(__file__).resolve().parents[2]
@@ -83,10 +88,10 @@ class EnvConfig:
     def token_for_env(self, env_name: Optional[str] = None) -> str:
         """按环境读取默认 token, 优先环境专属变量, 再回退到 API_TOKEN."""
         effective_env = (env_name or self.ENV).upper()
-        env_token = os.getenv(f"API_TOKEN_{effective_env}")
+        env_token = _normalize_env_text(os.getenv(f"API_TOKEN_{effective_env}"))
         if env_token:
             return env_token
-        return os.getenv("API_TOKEN", "")
+        return _normalize_env_text(os.getenv("API_TOKEN", ""))
 
     @property
     def DEBUG(self) -> bool:

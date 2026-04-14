@@ -2,6 +2,8 @@
 
 企业级API自动化测试框架，基于 pytest + requests 构建，提供完整的测试解决方案。
 
+当前 public 仓库仅保留 `/userly/method/users/me.json` 的获取测试，用于演示环境配置、接口封装、数据驱动和报告生成链路。
+
 ## ✨ 核心特性
 
 | 特性 | 说明 |
@@ -13,7 +15,7 @@
 | 🏷️ **数据驱动** | YAML文件管理测试数据，支持参数化测试 |
 | 🛡️ **HTTP封装** | 统一的HTTP客户端，支持重试、超时、SSL验证配置 |
 | 🎨 **装饰器模式** | 提供多种实用装饰器：错误处理、重试、跳过、步骤记录 |
-| 🔧 **动态测试数据** | 支持动态生成 scenario_id、timestamp 等测试参数 |
+| 👤 **单接口示例** | 当前仓库聚焦 `me.json` 当前用户接口，便于公开演示与维护 |
 | ⚡ **极速包管理** | 使用 uv 工具进行高效的 Python 环境和依赖管理 |
 
 ## 📦 技术栈
@@ -37,7 +39,7 @@ brainautotest/
 │   ├── api/                    # 接口调用层
 │   ├── utils/                  # 公共工具层
 │   └── testcases/              # 测试用例层
-├── testdata/                   # 测试数据层
+├── testdata/                   # 测试数据层（当前仅保留 user_profile_data.yaml）
 ├── bucket/                     # 输出目录
 │   ├── logs/                   # 日志文件
 │   ├── allure-results/         # Allure 原始数据
@@ -116,13 +118,10 @@ python run.py
 pytest src/testcases/ -v
 
 # 方式三：运行指定文件
-pytest src/testcases/test_understanding_write.py -v
+pytest src/testcases/test_user_profile.py -v
 
 # 方式四：按用例名称筛选
-pytest src/testcases/ -v -k "write"
-
-# 方式五：按标记筛选
-pytest src/testcases/ -v -m "story:记忆自定义接口"
+pytest src/testcases/test_user_profile.py -v -k "基本信息"
 ```
 
 ## 🎯 核心功能详解
@@ -148,47 +147,30 @@ def test_api_call(self):
 - `AssertionError`: 断言失败
 - `Exception`: 未预期异常
 
-### 2. 动态测试数据
+### 2. 当前保留测试范围
 
-测试框架支持在运行时动态生成测试参数：
+当前 public 仓库只保留一个测试文件和一份测试数据:
 
-```python
-import uuid
-from datetime import datetime, timezone
-
-# 动态生成 scenario_id
-scenario_id = f"memory_custom_{uuid.uuid4().hex}"
-# 示例: memory_custom_a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6
-
-# 动态生成 timestamp
-timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
-# 示例: 2026-04-07T10:30:45.123Z
+```text
+src/testcases/test_user_profile.py
+testdata/user_profile_data.yaml
 ```
 
 **支持的校验方式：**
 - `expected_response`: 完全匹配响应内容
-- `expected_fact_contains`: 校验响应中是否包含指定字符串
-- `expected_name`: 校验错误响应中的 name 字段
-- `expected_data`: 校验错误响应中的 data 字段
+- `expected_fields`: 校验顶层字段
+- `expected_nested_fields`: 校验嵌套字段
 
 ### 3. 测试数据 YAML 字段说明
 
 ```yaml
-test_understanding_write:
-  - name: "用例名称"                    # 测试用例名称
-    endpoint: "/api/endpoint"          # API 端点
-    data:                               # 请求数据
-      - scenario_id: "xxx"              # 场景ID（支持动态生成）
-        scenario_type: "memory_custom" # 场景类型
-        timestamp: "2026-04-07T..."     # 时间戳（支持动态生成）
-        user_action:                    # 用户动作
-          type: "memory_custom"
-          description: "描述内容"
-    expected_status_code: 200           # 预期状态码
-    expected_response: []                # 预期响应（完全匹配）
-    expected_fact_contains: "1月5日"    # 预期响应包含字段
-    expected_name: "invalid_request"    # 预期错误名称
-    expected_data: null                 # 预期错误数据
+test_user_profile:
+  - name: "校验用户基本信息"            # 测试用例名称
+    description: "验证获取当前用户信息接口返回正确的数据"
+    use_env_token: true                # 是否使用环境变量中的 token
+    expected_status_code: 200          # 预期状态码
+    expected_fields:                   # 顶层字段断言
+      email: "tangju+002@brain.im"
 ```
 
 ### 4. 错误处理装饰器
@@ -288,8 +270,8 @@ def pytest_html_results_table_header(cells):
 |----------|------|------|
 | HTML报告 | `bucket/html-report/report.html` | 包含请求/响应详情 |
 | Allure数据 | `bucket/allure-results/` | Allure原始数据 |
-| Allure HTML | `bucket/allure-html/index.html` | Allure可视化报告 |
-| 归档报告 | `bucket/allure-reports/YYYYMMDD_HHMMSS/` | 每次执行的报告副本 |
+| Allure HTML | `bucket/allure-report/index.html` | Allure可视化报告 |
+| 归档报告 | `bucket/archives/YYYYMMDD_HHMMSS/` | 每次执行的报告副本 |
 | 日志文件 | `bucket/logs/test_*.log` | 完整的执行日志 |
 
 ### 查看 Allure 报告
@@ -299,8 +281,8 @@ def pytest_html_results_table_header(cells):
 allure serve bucket/allure-results
 
 # 方式二：直接打开HTML文件
-open bucket/allure-html/index.html  # Mac
-start bucket/allure-html/index.html  # Windows
+open bucket/allure-report/index.html  # Mac
+start bucket/allure-report/index.html  # Windows
 ```
 
 ## 🔧 环境变量
@@ -319,85 +301,58 @@ start bucket/allure-html/index.html  # Windows
 ```python
 import pytest
 import allure
-import uuid
-from datetime import datetime, timezone
 from src.utils.error_handler import ExceptionHandler
-from src.api.understanding_api import UnderstandingAPI
+from src.api.user_api import UserAPI
+from src.utils.yaml_loader import get_test_data
 
-# 定义测试数据常量
-WRITE_TEST_DATA = get_test_data("testdata/understanding_write_data.yaml", "test_understanding_write")
+USER_PROFILE_TEST_DATA = get_test_data("testdata/user_profile_data.yaml", "test_user_profile")
 
-class TestUnderstandingWrite:
+class TestUserProfile:
     @pytest.fixture(autouse=True)
     def setup(self, logger, request):
-        self.api = UnderstandingAPI()
+        self.api = UserAPI()
         self.logger = logger
         self.request = request
 
-    @pytest.mark.parametrize("test_case", WRITE_TEST_DATA,
-                         ids=[tc["name"] for tc in WRITE_TEST_DATA])
-    @allure.story("记忆自定义接口")
+    @pytest.mark.parametrize("test_case", USER_PROFILE_TEST_DATA,
+                         ids=[tc["name"] for tc in USER_PROFILE_TEST_DATA])
+    @allure.story("获取当前用户信息")
     @allure.title("{test_case[name]}")
-    def test_write(self, test_case):
-        # 动态生成测试数据
-        request_data = []
-        for item in test_case['data']:
-            new_item = item.copy()
-            if 'scenario_id' in new_item:
-                new_item['scenario_id'] = f"memory_custom_{uuid.uuid4().hex}"
-            if 'timestamp' in new_item:
-                new_item['timestamp'] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
-            request_data.append(new_item)
-
+    def test_user_profile(self, test_case):
         with ExceptionHandler(self.logger, self.request):
-            response = self.api.write(endpoint=test_case["endpoint"], data=request_data)
+            response = self.api.get_current_user(
+                headers=test_case.get("headers"),
+                check_status_code=(test_case.get("expected_status_code", 200) == 200),
+                use_env_token=test_case.get("use_env_token", True),
+            )
             assert response.status_code == test_case["expected_status_code"]
 ```
 
 ### 2. 测试数据管理
 
-在 `testdata/` 目录下创建YAML文件：
+当前测试数据集中在 `testdata/user_profile_data.yaml`：
 
 ```yaml
-test_api_write:
-  - name: "正常场景-写成功"
-    endpoint: "/api/write"
-    data:
-      - scenario_id: "test_001"
-        scenario_type: "test"
-        timestamp: "2026-04-07T10:00:00Z"
-        user_action:
-          type: "test"
-          description: "测试数据"
+test_user_profile:
+  - name: "校验用户基本信息"
+    description: "验证获取当前用户信息接口返回正确的数据"
+    use_env_token: true
     expected_status_code: 200
-
-  - name: "异常场景-参数错误"
-    endpoint: "/api/write"
-    data:
-      - scenario_type: "test"
-        timestamp: "2026-04-07T10:00:00Z"
-    expected_status_code: 400
-    expected_name: "invalid_request"
-    expected_data: null
+    expected_fields:
+      email: "tangju+002@brain.im"
 ```
 
 ## 🛠️ 维护约定
 
 ### 用例更新职责
-- **接口用例**：由接口负责人维护对应的 `testdata/*.yaml` 测试数据
+- **接口用例**：当前仅维护 `user_profile_data.yaml` 中的当前用户接口测试数据
 - **框架变更**：由测试开发维护 `api/` 和 `utils/` 公共模块
 
 ### 接口契约变更流程
 1. 接口文档更新后，通知测试负责人
-2. 测试负责人更新对应YAML测试数据
+2. 测试负责人更新 `testdata/user_profile_data.yaml`
 3. 如有新字段或废弃字段，同步更新 `api/*.py` 封装
-4. 运行完整测试套件验证兼容性
-
-### 新增接口用例
-1. 在 `testdata/` 下创建新的 `xxx_data.yaml`
-2. 在 `api/` 下创建对应的API封装类
-3. 在 `testcases/` 下创建测试用例类
-4. 更新 `conftest.py` 如需添加公共fixture
+4. 运行当前用户接口测试验证兼容性
 
 ## 🐛 故障排查
 
@@ -419,14 +374,14 @@ A: 确保已安装Allure CLI并添加到PATH环境变量
 A: 检查 `logs/` 目录下的日志文件，包含完整的请求/响应信息
 
 **Q: 如何调试单个测试用例？**
-A: 使用 `-k` 参数筛选：`pytest -v -k "test_case_name"`
+A: 运行 `pytest src/testcases/test_user_profile.py -v`，或使用 `-k` 参数筛选具体用例名
 
 **Q: uv 同步依赖失败？**
 A: 确保 pyproject.toml 中 dependencies 字段格式正确，Python 版本符合 requires-python 要求
 
 ## 📈 性能指标
 
-- **测试执行时间**: 约11秒（7个测试用例）
+- **测试执行时间**: 取决于当前用户接口响应时间，当前默认仅 1 个用例
 - **并发支持**: 支持pytest-xdist并行执行
 - **内存占用**: < 100MB
 - **日志文件**: 自动按日期分割，避免单个文件过大
