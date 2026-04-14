@@ -14,9 +14,9 @@ name: API Automation Test
 # ========================================
 on:
   push:
-    branches: [ main, master, develop, test, jp, test-413 ]
+    branches: [ master, develop, jp ]
   pull_request:
-    branches: [ main, master, develop, test, jp, test-413 ]
+    branches: [ master, develop, jp ]
   schedule:
     - cron: '0 */8 * * *'
   workflow_dispatch:
@@ -24,7 +24,7 @@ on:
 # ========================================
 # 环境变量
 # ========================================
-# TEST_ENV: main/master -> prod, jp -> jp, 其余分支 -> dev.
+# TEST_ENV: master -> prod, jp -> jp, 其余分支 -> dev.
 env:
   API_TOKEN_DEV: ${{ secrets.API_TOKEN_DEV }}
   API_TOKEN_PROD: ${{ secrets.API_TOKEN_PROD }}
@@ -58,21 +58,6 @@ jobs:
                 "checkout_ref": "develop",
                 "test_env": "dev",
             },
-            "test-413": {
-                "branch_name": "test-413",
-                "checkout_ref": "test-413",
-                "test_env": "dev",
-            },
-            "test": {
-                "branch_name": "test",
-                "checkout_ref": "test",
-                "test_env": "dev",
-            },
-            "main": {
-                "branch_name": "main",
-                "checkout_ref": "main",
-                "test_env": "prod",
-            },
             "master": {
                 "branch_name": "master",
                 "checkout_ref": "master",
@@ -97,7 +82,7 @@ jobs:
             if ref_name in branch_map:
                 selected = [branch_map[ref_name]]
             else:
-                fallback_env = "jp" if ref_name == "jp" else ("prod" if ref_name in {"main", "master"} else "dev")
+                fallback_env = "jp" if ref_name == "jp" else ("prod" if ref_name == "master" else "dev")
                 selected = [{
                     "branch_name": ref_name or "manual",
                     "checkout_ref": ref_name or "HEAD",
@@ -273,7 +258,7 @@ jobs:
         shopt -s nullglob
         for artifact_dir in artifacts/allure-results/allure-results-*; do
           branch="${artifact_dir##*/allure-results-}"
-          if [ "${branch}" = "main" ] || [ "${branch}" = "master" ]; then
+          if [ "${branch}" = "master" ]; then
             test_env="prod"
           elif [ "${branch}" = "jp" ]; then
             test_env="jp"
@@ -345,8 +330,14 @@ jobs:
 
           allure generate "${results_dir}" -o "${generated_report_dir}" --clean
           cp -r "${generated_report_dir}/." "${final_report_dir}/"
+          if [ -f "${results_dir}/build-info.json" ]; then
+            cp "${results_dir}/build-info.json" "${final_report_dir}/build-info.json"
+          fi
+          if [ -f "${results_dir}/executor.json" ]; then
+            cp "${results_dir}/executor.json" "${final_report_dir}/executor.json"
+          fi
 
-          if [ "${branch}" = "develop" ] || [ "${branch}" = "main" ] || [ "${branch}" = "jp" ] || [ ! -f "${final_env_root}/index.html" ]; then
+          if [ "${branch}" = "develop" ] || [ "${branch}" = "master" ] || [ "${branch}" = "jp" ] || [ ! -f "${final_env_root}/index.html" ]; then
             cp -r "${generated_report_dir}/." "${final_env_root}/"
             echo "[CiWorkflow] latest_report_updated | branch=${branch} | env=${test_env}"
           fi
