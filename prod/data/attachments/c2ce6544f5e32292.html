@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>curl</title>
+</head>
+<body style="font-family:system-ui,sans-serif;padding:12px;margin:0;">
+<button type="button" id="copy-btn" style="padding:8px 12px;cursor:pointer;margin-bottom:10px;">复制 curl 到剪贴板</button>
+<pre id="curl-pre" style="white-space:pre-wrap;word-break:break-all;background:#f6f8fa;padding:12px;border-radius:6px;font-size:12px;line-height:1.4;margin:0;"></pre>
+<p id="hint" style="color:#666;font-size:12px;margin-top:8px;display:none;">若按钮无效, 请手动选中上方命令复制。</p>
+<script>
+(function() {
+  var text = "curl -X GET https://api.cloud.brain.ai/v1.0/invoke/userly/method/users/me.json \\\n  -H 'Authorization: token ***' \\\n  -H 'Host: api.cloud.brain.ai' \\\n  -H 'Content-Type: application/json' \\\n  --compressed";
+  var pre = document.getElementById('curl-pre');
+  var btn = document.getElementById('copy-btn');
+  var hint = document.getElementById('hint');
+  pre.textContent = text;
+  function done() {
+    var prev = btn.textContent;
+    btn.textContent = '已复制';
+    setTimeout(function() { btn.textContent = prev; }, 2000);
+  }
+  function showHint() { hint.style.display = 'block'; }
+  btn.addEventListener('click', function() {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done).catch(function() { fallback(); });
+    } else {
+      fallback();
+    }
+    function fallback() {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (ok) done(); else showHint();
+      } catch (e) { showHint(); }
+    }
+  });
+})();
+</script>
+</body>
+</html>
