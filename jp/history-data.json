@@ -1,5 +1,17 @@
 [
   {
+    "build_number": "19",
+    "run_id": "24488330357-jp",
+    "branch": "jp",
+    "env": "jp",
+    "build_time": "2026-04-16 10:13:14",
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "broken": 0,
+    "skipped": 0
+  },
+  {
     "build_number": "18",
     "run_id": "24467332670-jp",
     "branch": "jp",
