@@ -1,0 +1,9 @@
+{
+  "name": "GitHub Actions",
+  "type": "github",
+  "buildOrder": "64",
+  "buildName": "#64 jp",
+  "buildUrl": "https://github.com/tangju0418/autotest-nabot-public/actions/runs/25199710513",
+  "reportUrl": "https://tangju0418.github.io/autotest-nabot-public/jp/reports/25199710513-jp/",
+  "reportName": "Allure Report #64 jp"
+}
