@@ -1,0 +1,12 @@
+{
+  "build_number": "252",
+  "run_id": "28634585779-develop",
+  "branch": "develop",
+  "env": "dev",
+  "build_time": "2026-07-03 10:33:15",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "broken": 0,
+  "skipped": 0
+}
