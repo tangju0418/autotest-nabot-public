@@ -1,0 +1,12 @@
+{
+  "build_number": "280",
+  "run_id": "29188040654-develop",
+  "branch": "develop",
+  "env": "dev",
+  "build_time": "2026-07-12 17:46:58",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "broken": 0,
+  "skipped": 0
+}
