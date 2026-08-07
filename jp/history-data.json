@@ -1,5 +1,17 @@
 [
   {
+    "build_number": "359",
+    "run_id": "31199348506-jp",
+    "branch": "jp",
+    "env": "jp",
+    "build_time": "2026-08-08 00:48:57",
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "broken": 0,
+    "skipped": 0
+  },
+  {
     "build_number": "358",
     "run_id": "31163566003-jp",
     "branch": "jp",
