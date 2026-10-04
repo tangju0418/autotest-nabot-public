@@ -1,0 +1,9 @@
+{
+  "name": "GitHub Actions",
+  "type": "github",
+  "buildOrder": "527",
+  "buildName": "#527 develop",
+  "buildUrl": "https://github.com/tangju0418/autotest-nabot-public/actions/runs/37175738396",
+  "reportUrl": "https://tangju0418.github.io/autotest-nabot-public/dev/reports/37175738396-develop/",
+  "reportName": "Allure Report #527 develop"
+}
