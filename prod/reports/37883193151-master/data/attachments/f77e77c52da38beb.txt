@@ -1,0 +1,15 @@
+INFO     api_test:test_user_profile.py:61 开始执行测试用例: 校验用户基本信息
+INFO     api_test:test_user_profile.py:62 测试描述: 验证获取当前用户信息接口返回正确的数据
+INFO     api_test:test_user_profile.py:63 请求Headers: None
+INFO     http_client:http_client.py:412 [ApiAuth] build_api_client | env=prod | use_env_token=True | headers_provided=False | has_authorization=True | host=api.cloud.brain.ai | content_type=application/json | auth_source=env_default
+INFO     http_client:http_client.py:138 [http_client] HTTPClient初始化完成 | base_url: https://api.cloud.brain.ai/v1.0/invoke | timeout: 30.0s | verify_ssl: True | TEST_ENV: prod
+INFO     http_client:http_client.py:138 [http_client] HTTPClient初始化完成 | base_url: https://api.cloud.brain.ai/v1.0/invoke | timeout: 30.0s | verify_ssl: True | TEST_ENV: prod
+INFO     user_api:user_api.py:105 开始获取当前用户信息
+INFO     http_client:http_client.py:412 [ApiAuth] build_api_client | env=prod | use_env_token=True | headers_provided=False | has_authorization=True | host=api.cloud.brain.ai | content_type=application/json | auth_source=env_default
+INFO     http_client:http_client.py:138 [http_client] HTTPClient初始化完成 | base_url: https://api.cloud.brain.ai/v1.0/invoke | timeout: 30.0s | verify_ssl: True | TEST_ENV: prod
+INFO     http_client:http_client.py:311 GET请求 - https://api.cloud.brain.ai/v1.0/invoke/userly/method/users/me.json
+DEBUG    http_client:http_client.py:238 发送请求 - GET https://api.cloud.brain.ai/v1.0/invoke/userly/method/users/me.json
+WARNING  http_client:http_client.py:242 请求返回错误状态码 500 - GET https://api.cloud.brain.ai/v1.0/invoke/userly/method/users/me.json
+ERROR    user_api:user_api.py:111 get_current_user接口返回异常状态码: 500
+ERROR    error_handler:error_handler.py:93 API自动化测试异常: 响应数据无效: get_current_user接口返回异常状态码: 500, 响应数据: {'status_code': 500, 'body': '{"errorCode":"ERR_DIRECT_INVOKE","message":"failed to invoke, id: userly, err: failed to invoke target userly after 3 retries. Error: rpc error: code = Unavailable desc =
+ERROR    api_test:error_handler.py:331 响应数据无效: 响应数据无效: get_current_user接口返回异常状态码: 500, 响应数据: {'status_code': 500, 'body': '{"errorCode":"ERR_DIRECT_INVOKE","message":"failed to invoke, id: userly, err: failed to invoke target userly after 3 retries. Error: rpc error: code = Unavailable desc =
