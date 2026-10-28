@@ -1,5 +1,17 @@
 [
   {
+    "build_number": "598",
+    "run_id": "40709402159-master",
+    "branch": "master",
+    "env": "prod",
+    "build_time": "2026-10-28 22:47:38",
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "broken": 0,
+    "skipped": 0
+  },
+  {
     "build_number": "597",
     "run_id": "40628371082-master",
     "branch": "master",
