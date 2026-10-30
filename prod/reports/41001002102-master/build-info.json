@@ -1,0 +1,12 @@
+{
+  "build_number": "603",
+  "run_id": "41001002102-master",
+  "branch": "master",
+  "env": "prod",
+  "build_time": "2026-10-30 12:06:24",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "broken": 0,
+  "skipped": 0
+}
