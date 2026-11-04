@@ -1,2 +1,2 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","256","校验用户基本信息","src.testcases","2026-11-03","passed","2026-11-03","TestUserProfile","test_user_profile","",""
+"","331","校验用户基本信息","src.testcases","2026-11-04","passed","2026-11-04","TestUserProfile","test_user_profile","",""
