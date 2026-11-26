@@ -1,5 +1,17 @@
 [
   {
+    "build_number": "671",
+    "run_id": "45872800114-develop",
+    "branch": "develop",
+    "env": "dev",
+    "build_time": "2026-11-27 02:03:25",
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "broken": 0,
+    "skipped": 0
+  },
+  {
     "build_number": "670",
     "run_id": "45769196866-develop",
     "branch": "develop",
